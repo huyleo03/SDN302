@@ -1,0 +1,294 @@
+/* ProductDetail.css */
+
+/* Product Images */
+.product-main-image {
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+}
+
+.product-main-image:hover {
+  transform: scale(1.02);
+}
+
+/* Product Info Section */
+.product-info {
+  position: sticky;
+  top: 20px;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  background-color: transparent;
+  padding: 0;
+}
+
+.breadcrumb .btn {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.breadcrumb .btn:hover {
+  color: #007bff;
+  text-decoration: underline !important;
+}
+
+.breadcrumb-item.active {
+  color: #495057;
+  font-weight: 500;
+}
+
+/* Product Title */
+.display-6 {
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+/* Price Display */
+.display-5 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+/* Badges */
+.badge {
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+/* Action Buttons */
+.btn-lg {
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+}
+
+.btn {
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Seller Info */
+.seller-info img,
+.seller-info .rounded-circle {
+  border: 2px solid #e9ecef;
+  transition: border-color 0.2s ease;
+}
+
+.seller-info:hover img,
+.seller-info:hover .rounded-circle {
+  border-color: #007bff;
+}
+
+/* Tabs */
+.nav-tabs {
+  border-bottom: 2px solid #e9ecef;
+}
+
+.nav-tabs .nav-link {
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #6c757d;
+  font-weight: 500;
+  padding: 12px 20px;
+  transition: all 0.2s ease;
+}
+
+.nav-tabs .nav-link:hover {
+  border-bottom-color: #007bff;
+  color: #007bff;
+  background-color: transparent;
+}
+
+.nav-tabs .nav-link.active {
+  border-bottom-color: #007bff;
+  color: #007bff;
+  background-color: transparent;
+  font-weight: 600;
+}
+
+/* Product Description */
+.product-description {
+  min-height: 200px;
+}
+
+.description-content {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #495057;
+}
+
+/* Specifications Table */
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.table td {
+  padding: 12px 16px;
+  border-top: 1px solid #e9ecef;
+}
+
+.table td.fw-semibold {
+  width: 30%;
+  background-color: #f8f9fa;
+}
+
+/* Shipping Info */
+.shipping-info .bi {
+  width: 24px;
+  text-align: center;
+}
+
+.alert-info {
+  background-color: #e7f3ff;
+  border-color: #b8daff;
+  color: #0c5460;
+}
+
+/* Carousel Controls */
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%;
+  background: linear-gradient(90deg, rgba(0,0,0,0.3) 0%, transparent 100%);
+}
+
+.carousel-control-next {
+  background: linear-gradient(270deg, rgba(0,0,0,0.3) 0%, transparent 100%);
+}
+
+.carousel-indicators {
+  bottom: 10px;
+}
+
+.carousel-indicators [data-bs-target] {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin: 0 4px;
+}
+
+/* Card Styling */
+.card {
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading and Error States */
+.spinner-border-lg {
+  width: 4rem;
+  height: 4rem;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .product-info {
+    position: static;
+    margin-top: 2rem;
+  }
+  
+  .display-6 {
+    font-size: 1.75rem;
+  }
+  
+  .display-5 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-main-image {
+    height: 300px !important;
+  }
+  
+  .display-6 {
+    font-size: 1.5rem;
+  }
+  
+  .display-5 {
+    font-size: 1.75rem;
+  }
+  
+  .btn-lg {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+  
+  .nav-tabs .nav-link {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .table td.fw-semibold {
+    width: 40%;
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .breadcrumb {
+    font-size: 0.8rem;
+  }
+  
+  .badge {
+    font-size: 0.7rem;
+    padding: 0.4em 0.6em;
+  }
+  
+  .product-main-image {
+    height: 250px !important;
+  }
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.product-info,
+.tab-content {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Custom Scrollbar for Description */
+.description-content {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.description-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.description-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.description-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.description-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
