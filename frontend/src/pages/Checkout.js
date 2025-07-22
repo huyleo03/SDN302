@@ -28,7 +28,7 @@ const Checkout = () => {
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  
+
   // Edit address states
   const [editingAddressId, setEditingAddressId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -67,7 +67,7 @@ const Checkout = () => {
 
         // Load addresses
         setLoading(true);
-        
+
         const response = await addressService.getUserAddresses();
 
         if (response && response.success) {
@@ -141,21 +141,24 @@ const Checkout = () => {
       // Create new address
       try {
         setSubmitting(true);
-        
+
         const response = await addressService.createAddress(addressData);
-        console.log('✅ Address created:', response);
+        console.log("✅ Address created:", response);
 
         if (response && response.success) {
           // Refresh addresses
-          console.log('🔄 Refreshing addresses list...');
+          console.log("🔄 Refreshing addresses list...");
           const updatedResponse = await addressService.getUserAddresses();
-          
+
           if (updatedResponse && updatedResponse.success) {
-            console.log('✅ Addresses refreshed:', updatedResponse.data?.length);
+            console.log(
+              "✅ Addresses refreshed:",
+              updatedResponse.data?.length
+            );
             setAddresses(updatedResponse.data || []);
             setSelectedAddressId(response.data._id);
             setShowAddressForm(false);
-            
+
             // Reset form
             setAddressData({
               fullName: "",
@@ -167,11 +170,11 @@ const Checkout = () => {
               isDefault: false,
             });
           } else {
-            console.log('❌ Failed to refresh addresses');
+            console.log("❌ Failed to refresh addresses");
             alert("Địa chỉ đã được tạo nhưng không thể tải lại danh sách.");
           }
         } else {
-          console.log('❌ Failed to create address:', response);
+          console.log("❌ Failed to create address:", response);
           alert("Lỗi khi tạo địa chỉ. Vui lòng thử lại.");
         }
       } catch (error) {
@@ -205,24 +208,27 @@ const Checkout = () => {
 
     try {
       setSubmitting(true);
-      console.log('📝 Updating address:', editingAddressId, addressData);
-      
-      const response = await addressService.updateAddress(editingAddressId, addressData);
-      console.log('✅ Address updated:', response);
+      console.log("📝 Updating address:", editingAddressId, addressData);
+
+      const response = await addressService.updateAddress(
+        editingAddressId,
+        addressData
+      );
+      console.log("✅ Address updated:", response);
 
       if (response && response.success) {
         // Refresh addresses
-        console.log('🔄 Refreshing addresses list...');
+        console.log("🔄 Refreshing addresses list...");
         const updatedResponse = await addressService.getUserAddresses();
-        
+
         if (updatedResponse && updatedResponse.success) {
-          console.log('✅ Addresses refreshed:', updatedResponse.data?.length);
+          console.log("✅ Addresses refreshed:", updatedResponse.data?.length);
           setAddresses(updatedResponse.data || []);
           setSelectedAddressId(editingAddressId);
           setShowAddressForm(false);
           setIsEditing(false);
           setEditingAddressId(null);
-          
+
           // Reset form
           setAddressData({
             fullName: "",
@@ -234,11 +240,11 @@ const Checkout = () => {
             isDefault: false,
           });
         } else {
-          console.log('❌ Failed to refresh addresses');
+          console.log("❌ Failed to refresh addresses");
           alert("Địa chỉ đã được cập nhật nhưng không thể tải lại danh sách.");
         }
       } else {
-        console.log('❌ Failed to update address:', response);
+        console.log("❌ Failed to update address:", response);
         alert("Lỗi khi cập nhật địa chỉ. Vui lòng thử lại.");
       }
     } catch (error) {
@@ -251,26 +257,26 @@ const Checkout = () => {
 
   // Handle delete address
   const handleDeleteAddress = async (addressId) => {
-    if (!window.confirm('Bạn có chắc chắn muốn xóa địa chỉ này?')) {
+    if (!window.confirm("Bạn có chắc chắn muốn xóa địa chỉ này?")) {
       return;
     }
 
     try {
       setSubmitting(true);
-      console.log('🗑️ Deleting address:', addressId);
-      
+      console.log("🗑️ Deleting address:", addressId);
+
       const response = await addressService.deleteAddress(addressId);
-      console.log('✅ Address deleted:', response);
+      console.log("✅ Address deleted:", response);
 
       if (response && response.success) {
         // Refresh addresses
-        console.log('🔄 Refreshing addresses list...');
+        console.log("🔄 Refreshing addresses list...");
         const updatedResponse = await addressService.getUserAddresses();
-        
+
         if (updatedResponse && updatedResponse.success) {
-          console.log('✅ Addresses refreshed:', updatedResponse.data?.length);
+          console.log("✅ Addresses refreshed:", updatedResponse.data?.length);
           setAddresses(updatedResponse.data || []);
-          
+
           // If deleted address was selected, clear selection
           if (selectedAddressId === addressId) {
             setSelectedAddressId(null);
@@ -290,11 +296,11 @@ const Checkout = () => {
             }
           }
         } else {
-          console.log('❌ Failed to refresh addresses');
+          console.log("❌ Failed to refresh addresses");
           alert("Địa chỉ đã được xóa nhưng không thể tải lại danh sách.");
         }
       } else {
-        console.log('❌ Failed to delete address:', response);
+        console.log("❌ Failed to delete address:", response);
         alert("Lỗi khi xóa địa chỉ. Vui lòng thử lại.");
       }
     } catch (error) {
@@ -309,15 +315,15 @@ const Checkout = () => {
   const handleSetDefaultAddress = async (addressId) => {
     try {
       setSubmitting(true);
-      console.log('⭐ Setting default address:', addressId);
-      
+      console.log("⭐ Setting default address:", addressId);
+
       const response = await addressService.setDefaultAddress(addressId);
-      console.log('✅ Default address set:', response);
+      console.log("✅ Default address set:", response);
 
       if (response && response.success) {
         // Refresh addresses
         const updatedResponse = await addressService.getUserAddresses();
-        
+
         if (updatedResponse && updatedResponse.success) {
           setAddresses(updatedResponse.data || []);
         }
@@ -343,7 +349,7 @@ const Checkout = () => {
       street: "",
       city: "",
       state: "",
-      country: "Việt Nam",
+      country: "",
       isDefault: false,
     });
   };
@@ -414,10 +420,10 @@ const Checkout = () => {
         <Col>
           <h1 className="display-6 fw-bold">
             <i className="bi bi-credit-card me-2"></i>
-            Thanh toán đơn hàng
+            Checkout
           </h1>
           <p className="text-muted">
-            Xác nhận thông tin và hoàn tất đơn hàng của bạn
+            Review your information and complete your order
           </p>
         </Col>
       </Row>
@@ -432,7 +438,7 @@ const Checkout = () => {
                 <div className="d-flex justify-content-between align-items-center">
                   <h5 className="mb-0">
                     <i className="bi bi-geo-alt me-2"></i>
-                    Địa chỉ giao hàng
+                    Shipping Address
                   </h5>
                   <Button
                     variant="outline-primary"
@@ -455,8 +461,8 @@ const Checkout = () => {
                     }`}
                   >
                     <div className="d-flex justify-content-between align-items-start">
-                      <div 
-                        className="flex-grow-1" 
+                      <div
+                        className="flex-grow-1"
                         style={{ cursor: "pointer" }}
                         onClick={() => handleAddressSelect(address)}
                       >
@@ -471,7 +477,7 @@ const Checkout = () => {
                           <h6 className="fw-bold mb-0">{address.fullName}</h6>
                           {address.isDefault && (
                             <Badge bg="primary" className="ms-2">
-                              Mặc định
+                              Default
                             </Badge>
                           )}
                         </div>
@@ -484,7 +490,7 @@ const Checkout = () => {
                           {address.phone}
                         </p>
                       </div>
-                      
+
                       {/* Action Buttons */}
                       <div className="d-flex flex-column gap-1 ms-3">
                         <Button
@@ -498,22 +504,8 @@ const Checkout = () => {
                         >
                           <i className="bi bi-pencil"></i>
                         </Button>
-                        
-                        {!address.isDefault && (
-                          <Button
-                            variant="outline-success"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleSetDefaultAddress(address._id);
-                            }}
-                            disabled={submitting}
-                            title="Đặt làm mặc định"
-                          >
-                            <i className="bi bi-star"></i>
-                          </Button>
-                        )}
-                        
+
+
                         {addresses.length > 1 && (
                           <Button
                             variant="outline-danger"
@@ -542,11 +534,11 @@ const Checkout = () => {
                 <div className="d-flex justify-content-between align-items-center">
                   <h5 className="mb-0">
                     <i className="bi bi-geo-alt me-2"></i>
-                    {isEditing 
-                      ? "Chỉnh sửa địa chỉ"
+                    {isEditing
+                      ? "Edit Address"
                       : addresses.length === 0
-                        ? "Thêm địa chỉ giao hàng"
-                        : "Thêm địa chỉ mới"}
+                      ? "Add Shipping Address"
+                      : "Add New Address"}
                   </h5>
                   {(addresses.length > 0 || isEditing) && (
                     <Button
@@ -555,7 +547,7 @@ const Checkout = () => {
                       onClick={handleCancelEdit}
                     >
                       <i className="bi bi-x me-1"></i>
-                      Hủy
+                      Cancel
                     </Button>
                   )}
                 </div>
@@ -565,7 +557,7 @@ const Checkout = () => {
                   <Row>
                     <Col md={6}>
                       <Form.Group className="mb-3">
-                        <Form.Label>Họ và tên *</Form.Label>
+                        <Form.Label>Fullname *</Form.Label>
                         <Form.Control
                           type="text"
                           name="fullName"
@@ -578,7 +570,7 @@ const Checkout = () => {
                     </Col>
                     <Col md={6}>
                       <Form.Group className="mb-3">
-                        <Form.Label>Số điện thoại *</Form.Label>
+                        <Form.Label>Phone number *</Form.Label>
                         <Form.Control
                           type="tel"
                           name="phone"
@@ -592,7 +584,7 @@ const Checkout = () => {
                   </Row>
 
                   <Form.Group className="mb-3">
-                    <Form.Label>Địa chỉ cụ thể *</Form.Label>
+                    <Form.Label>Street *</Form.Label>
                     <Form.Control
                       type="text"
                       name="street"
@@ -606,7 +598,7 @@ const Checkout = () => {
                   <Row>
                     <Col md={4}>
                       <Form.Group className="mb-3">
-                        <Form.Label>Thành phố *</Form.Label>
+                        <Form.Label>City *</Form.Label>
                         <Form.Control
                           type="text"
                           name="city"
@@ -669,12 +661,12 @@ const Checkout = () => {
                             size="sm"
                             className="me-2"
                           />
-                          Đang lưu...
+                          Saving...
                         </>
                       ) : (
                         <>
                           <i className="bi bi-check me-2"></i>
-                          {isEditing ? "Cập nhật địa chỉ" : "Lưu địa chỉ"}
+                          {isEditing ? "Edit" : "Save"}
                         </>
                       )}
                     </Button>
@@ -684,7 +676,7 @@ const Checkout = () => {
                         variant="outline-secondary"
                         onClick={handleCancelEdit}
                       >
-                        Hủy
+                        Cancel
                       </Button>
                     )}
                   </div>
@@ -703,12 +695,18 @@ const Checkout = () => {
                 </h5>
               </Card.Header>
               <Card.Body className="text-center py-4">
-                <i className="bi bi-geo-alt text-muted mb-3" style={{ fontSize: "3rem" }}></i>
+                <i
+                  className="bi bi-geo-alt text-muted mb-3"
+                  style={{ fontSize: "3rem" }}
+                ></i>
                 <h6 className="mb-3">Bạn chưa có địa chỉ giao hàng nào</h6>
                 <p className="text-muted mb-3">
                   Vui lòng thêm địa chỉ giao hàng để tiếp tục đặt hàng
                 </p>
-                <Button variant="primary" onClick={() => setShowAddressForm(true)}>
+                <Button
+                  variant="primary"
+                  onClick={() => setShowAddressForm(true)}
+                >
                   <i className="bi bi-plus me-2"></i>
                   Thêm địa chỉ giao hàng
                 </Button>
@@ -721,7 +719,7 @@ const Checkout = () => {
             <Card.Header className="bg-light">
               <h5 className="mb-0">
                 <i className="bi bi-credit-card me-2"></i>
-                Phương thức thanh toán
+                Payment Method
               </h5>
             </Card.Header>
             <Card.Body>
@@ -737,7 +735,7 @@ const Checkout = () => {
                     label={
                       <div>
                         <i className="bi bi-cash text-success me-2"></i>
-                        Thanh toán khi nhận hàng
+                        Cash on Delivery
                       </div>
                     }
                   />
@@ -768,7 +766,7 @@ const Checkout = () => {
             <Card.Header className="bg-light">
               <h5 className="mb-0">
                 <i className="bi bi-chat-dots me-2"></i>
-                Ghi chú đơn hàng (Tùy chọn)
+                Notes (Optional)
               </h5>
             </Card.Header>
             <Card.Body>
@@ -789,7 +787,7 @@ const Checkout = () => {
             <Card.Header className="bg-light">
               <h5 className="mb-0">
                 <i className="bi bi-bag me-2"></i>
-                Đơn hàng của bạn ({totalItems} sản phẩm)
+                Your Order ({totalItems} items)
               </h5>
             </Card.Header>
             <Card.Body>
@@ -833,26 +831,26 @@ const Checkout = () => {
             <Card.Header className="bg-primary text-white">
               <h5 className="mb-0">
                 <i className="bi bi-receipt me-2"></i>
-                Tóm tắt đơn hàng
+                Order Summary
               </h5>
             </Card.Header>
             <Card.Body>
               <div className="mb-3">
                 <div className="d-flex justify-content-between mb-2">
-                  <span>Tổng sản phẩm:</span>
-                  <span>{totalItems} sản phẩm</span>
+                  <span>Total items:</span>
+                  <span>{totalItems} items</span>
                 </div>
                 <div className="d-flex justify-content-between mb-2">
-                  <span>Tạm tính:</span>
+                  <span>Subtotal:</span>
                   <span>{formatPrice(totalPrice)}</span>
                 </div>
                 <div className="d-flex justify-content-between mb-2">
-                  <span>Phí vận chuyển:</span>
-                  <span className="text-success">Miễn phí</span>
+                  <span>Shipping:</span>
+                  <span className="text-success">Free</span>
                 </div>
                 <hr />
                 <div className="d-flex justify-content-between fw-bold fs-5">
-                  <span>Tổng cộng:</span>
+                  <span>Total:</span>
                   <span className="text-primary">
                     {formatPrice(totalPrice)}
                   </span>
@@ -870,12 +868,12 @@ const Checkout = () => {
                   {submitting ? (
                     <>
                       <Spinner animation="border" size="sm" className="me-2" />
-                      Đang xử lý...
+                      Processing...
                     </>
                   ) : (
                     <>
                       <i className="bi bi-credit-card me-2"></i>
-                      Đặt hàng ngay
+                      Place Order Now
                     </>
                   )}
                 </Button>
@@ -885,14 +883,14 @@ const Checkout = () => {
                   disabled={submitting}
                 >
                   <i className="bi bi-arrow-left me-2"></i>
-                  Quay lại giỏ hàng
+                  Back to Cart
                 </Button>
               </div>
 
               <Alert variant="info" className="mt-3 mb-0">
                 <small>
                   <i className="bi bi-shield-check me-1"></i>
-                  Thanh toán an toàn và bảo mật 100%
+                  100% Secure and Safe Payment
                 </small>
               </Alert>
             </Card.Body>

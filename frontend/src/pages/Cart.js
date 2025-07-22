@@ -81,16 +81,14 @@ const Cart = () => {
           <div className="d-flex justify-content-between align-items-center">
             <h1 className="display-6 fw-bold">
               <i className="bi bi-cart3 me-2"></i>
-              Giỏ hàng của bạn
+              Your cart
             </h1>
             <Button variant="outline-secondary" onClick={() => navigate("/")}>
               <i className="bi bi-arrow-left me-2"></i>
-              Tiếp tục mua sắm
+              Continue Shopping
             </Button>
           </div>
-          <p className="text-muted">
-            Bạn có {totalItems} sản phẩm trong giỏ hàng
-          </p>
+          <p className="text-muted">You have {totalItems} items in your cart</p>
         </Col>
       </Row>
 
@@ -101,7 +99,7 @@ const Cart = () => {
             <Card.Header className="bg-light">
               <Row className="align-items-center">
                 <Col>
-                  <h5 className="mb-0">Sản phẩm trong giỏ</h5>
+                  <h5 className="mb-0"> Items in Cart</h5>
                 </Col>
                 <Col xs="auto">
                   <Button
@@ -116,7 +114,7 @@ const Cart = () => {
                     }}
                   >
                     <i className="bi bi-trash me-1"></i>
-                    Xóa tất cả
+                    Delete All
                   </Button>
                 </Col>
               </Row>
@@ -146,28 +144,28 @@ const Cart = () => {
                       {/* Product Info */}
                       <Col xs={12} sm={4} className="mb-3 mb-sm-0">
                         <h6 className="mb-2 fw-bold">
-                          {item.productId?.title || "Không có tên sản phẩm"}
+                          {item.productId?.title || "Unknown Product"}
                         </h6>
                         <p className="text-muted small mb-2">
-                          Người bán:{" "}
+                          Seller :{" "}
                           <strong>
-                            {item.sellerId?.username || "Không rõ"}
+                            {item.sellerId?.username || "Unknown"}
                           </strong>
                         </p>
                         <div className="mb-2">
                           <Badge bg="success" className="me-2">
                             <i className="bi bi-check-circle me-1"></i>
                             {item.status === "active"
-                              ? "Có sẵn"
-                              : "Không khả dụng"}
+                              ? "Available"
+                              : "Not Available"}
                           </Badge>
                           <Badge bg="info">
-                            Giá lúc thêm: {formatPrice(item.priceAtTime)}
+                            Added Price: {formatPrice(item.priceAtTime)}
                           </Badge>
                         </div>
                         <small className="text-muted">
                           <i className="bi bi-clock me-1"></i>
-                          Thêm vào:{" "}
+                          Add:{" "}
                           {new Date(item.addedAt).toLocaleDateString("vi-VN")}
                         </small>
                       </Col>
@@ -264,26 +262,26 @@ const Cart = () => {
             <Card.Header className="bg-primary text-white">
               <h5 className="mb-0">
                 <i className="bi bi-receipt me-2"></i>
-                Tóm tắt đơn hàng
+                Order Summary
               </h5>
             </Card.Header>
             <Card.Body>
               <div className="mb-3">
                 <div className="d-flex justify-content-between mb-2">
-                  <span>Tổng sản phẩm:</span>
-                  <span>{totalItems} sản phẩm</span>
+                  <span>Total items:</span>
+                  <span>{totalItems} items</span>
                 </div>
                 <div className="d-flex justify-content-between mb-2">
-                  <span>Tạm tính:</span>
+                  <span> Subtotal:</span>
                   <span>{formatPrice(totalPrice)}</span>
                 </div>
                 <div className="d-flex justify-content-between mb-2">
-                  <span>Phí vận chuyển:</span>
-                  <span className="text-success">Miễn phí</span>
+                  <span>Shipping:</span>
+                  <span className="text-success">Free</span>
                 </div>
                 <hr />
                 <div className="d-flex justify-content-between fw-bold fs-5">
-                  <span>Tổng cộng:</span>
+                  <span>Total:</span>
                   <span className="text-primary">
                     {formatPrice(totalPrice)}
                   </span>
@@ -298,21 +296,21 @@ const Cart = () => {
                   className="fw-bold"
                 >
                   <i className="bi bi-credit-card me-2"></i>
-                  Tiếp tục đặt hàng
+                  Continue
                 </Button>
                 <Button
                   variant="outline-secondary"
                   onClick={() => navigate("/")}
                 >
                   <i className="bi bi-arrow-left me-2"></i>
-                  Tiếp tục mua sắm
+                  Continue Shopping
                 </Button>
               </div>
 
               <Alert variant="info" className="mt-3 mb-0">
                 <small>
                   <i className="bi bi-shield-check me-1"></i>
-                  Thanh toán an toàn và bảo mật 100%
+                  100% Secure and Safe Payment
                 </small>
               </Alert>
             </Card.Body>
