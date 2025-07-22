@@ -65,27 +65,37 @@ const Login = () => {
     }
   };
 
-  const handleGoogleLogin = async (credentialResponse) => {
-    try {
-      const credential = credentialResponse?.credential;
-      if (!credential) return setError("Không nhận được token từ Google");
-
-        const decoded = jwtDecode(credential);
-
-      const res = await axios.post("http://localhost:9999/api/auth/login/google", {
-        token: credential,
-      });
-
-      if (res.data.success) {
-        login(res.data.user, res.data.token);
-        navigate("/");
-      } else {
-        setError(res.data.message || "Đăng nhập Google thất bại");
-      }
-    } catch (err) {
-      setError("Lỗi khi đăng nhập Google");
+const handleGoogleLogin = async (credentialResponse) => {
+  try {
+    const credential = credentialResponse?.credential;
+    if (!credential) {
+      return setError("❌ Không nhận được token từ Google");
     }
-  };
+
+    const decoded = jwtDecode(credential); // Optional nếu bạn muốn dùng
+
+    const res = await axios.post("http://localhost:9999/api/auth/login/google", {
+      tokenId: credential,
+    });
+
+    if (res.status === 200) {
+      // ✅ Đăng nhập thành công, lưu user + token
+      login(res.data.user, res.data.token);
+
+      // ✅ Optional: Lưu username vào localStorage nếu cần
+      localStorage.setItem("username", res.data.user.username);
+
+      // ✅ Điều hướng kèm username
+      navigate("/", { state: { username: res.data.user.username } });
+    } else {
+      setError(res.data.message || "❌ Đăng nhập Google thất bại");
+    }
+  } catch (err) {
+    console.error("Google login error:", err);
+    setError("❌ Lỗi khi đăng nhập Google");
+  }
+};
+
 
   return (
     <Container className="py-5">

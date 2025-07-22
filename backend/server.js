@@ -6,7 +6,9 @@ const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const path = require('path');
-const cors = require('cors');
+const passport = require("passport");
+const session = require("express-session");
+
 
 // CORS middleware
 app.use((req, res, next) => {
@@ -22,13 +24,16 @@ app.use((req, res, next) => {
     next();
   }
 });
-app.use(cors({
-  origin: 'http://localhost:3000', 
-  credentials: true,
-}));
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+// Session (nếu dùng Passport session)
+app.use(session({ secret: "yourSecret", resave: false, saveUninitialized: true }));
+
+// Middleware
+app.use(passport.initialize());
+app.use(passport.session()); // Nếu dùng session
 
 // Routes
 app.use("/api/auth", userRoutes);
