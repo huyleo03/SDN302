@@ -32,6 +32,8 @@ const ProductDetail = () => {
     message: "",
     variant: "",
   });
+const [reviews, setReviews] = useState([]);
+const [loadingReviews, setLoadingReviews] = useState(true);
 
   useEffect(() => {
     const fetchProductDetail = async () => {
@@ -492,6 +494,12 @@ const ProductDetail = () => {
                       Vận chuyển
                     </Nav.Link>
                   </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="reviews">
+                      <i className="bi bi-star me-2"></i>
+                      Đánh giá
+                    </Nav.Link>
+                  </Nav.Item>
                 </Nav>
 
                 <Tab.Content>
@@ -599,6 +607,48 @@ const ProductDetail = () => {
                         <i className="bi bi-info-circle me-2"></i>
                         Miễn phí vận chuyển cho đơn hàng trên $50
                       </div>
+                    </div>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="reviews">
+                    <div className="product-reviews">
+                      <h5 className="mb-3">Đánh giá sản phẩm</h5>
+                      {loadingReviews ? (
+                        <Spinner animation="border" size="sm" />
+                      ) : reviews.length === 0 ? (
+                        <p className="text-muted">Chưa có đánh giá nào cho sản phẩm này.</p>
+                      ) : (
+                        <ul className="list-unstyled">
+                          {reviews.map((rv) => (
+                            <li key={rv._id} className="mb-4 border-bottom pb-3">
+                              <div className="d-flex align-items-center mb-2">
+                                <img
+                                  src={rv.userId?.avatarUrl || 'https://ui-avatars.com/api/?name=' + (rv.userId?.username || 'U')}
+                                  alt={rv.userId?.username || 'Ẩn danh'}
+                                  className="rounded-circle me-3"
+                                  style={{ width: 40, height: 40, objectFit: 'cover' }}
+                                />
+                                <div>
+                                  <strong>{rv.userId?.username || 'Ẩn danh'}</strong>
+                                  <div className="text-warning">
+                                    {Array.from({ length: 5 }).map((_, i) => (
+                                      <i
+                                        key={i}
+                                        className={
+                                          i < rv.rating ? 'bi bi-star-fill' : 'bi bi-star'
+                                        }
+                                      ></i>
+                                    ))}
+                                  </div>
+                                  <small className="text-muted">{formatDate(rv.createdAt)}</small>
+                                </div>
+                              </div>
+                              <div className="ps-5">
+                                <span>{rv.comment || <span className="text-muted">(Không có nội dung)</span>}</span>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
                   </Tab.Pane>
                 </Tab.Content>
