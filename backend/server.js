@@ -5,6 +5,7 @@ const app = express();
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
+const orderRoutes = require("./routes/order.route");
 
 // CORS middleware
 app.use((req, res, next) => {
@@ -28,6 +29,7 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use("/api/auth", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/orders", orderRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

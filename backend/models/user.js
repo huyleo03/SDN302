@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["user", "admin"],
+    enum: ["user", "seller", "admin"],
     default: "user",
   },
   avatarUrl: {
@@ -25,6 +25,9 @@ const userSchema = new mongoose.Schema({
     default:
       "https://images.unsplash.com/photo-1728577740843-5f29c7586afe?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
+  isVerified: { type: Boolean, default: false },
+  verificationToken: { type: String },
+  action: { type: String, default: "lock", enum: ["lock", "unlock"] },
 });
 
 const User = mongoose.model("User", userSchema, "User");
