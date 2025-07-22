@@ -70,7 +70,7 @@ const Header = () => {
                       <i className="bi bi-person me-2"></i>
                       Hồ sơ
                     </Dropdown.Item>
-                    <Dropdown.Item onClick={() => navigate("/orders")}>
+                    <Dropdown.Item onClick={() => navigate("/orders/history")}>
                       <i className="bi bi-bag me-2"></i>
                       Đơn hàng
                     </Dropdown.Item>
