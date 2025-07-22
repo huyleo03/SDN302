@@ -16,6 +16,7 @@ import { useCart } from "../hooks/useCart";
 import "../styles/ProductList.css";
 import axios from "axios";
 import { formatPrice } from "../utils/formatters";
+import { useMemo } from "react";
 const ProductList = () => {
   const navigate = useNavigate();
   const { addToCart, getItemQuantity } = useCart();
@@ -26,6 +27,9 @@ const ProductList = () => {
   const [filterCategory, setFilterCategory] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [viewMode, setViewMode] = useState("grid");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState(0);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -52,6 +56,11 @@ const ProductList = () => {
     };
     fetchProducts();
   }, []);
+
+  // Reset về trang 1 khi filter thay đổi
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterCategory, sortBy, minPrice]);
 
   const ProductCard = ({ product }) => {
     if (!product) return null;
@@ -239,6 +248,48 @@ const ProductList = () => {
     );
   };
 
+  // Tạo mảng sản phẩm đã lọc và sắp xếp
+  const filteredProducts = products
+    .filter((product) => {
+      // Lọc theo danh mục
+      if (filterCategory !== "all" && product.categoryId?.name !== filterCategory) {
+        return false;
+      }
+      // Lọc theo từ khóa tìm kiếm
+      if (
+        searchTerm &&
+        !product.title?.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        !product.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      ) {
+        return false;
+      }
+      // Lọc theo giá
+      if (minPrice !== "" && product.price < Number(minPrice)) return false;
+      return true;
+    })
+    .sort((a, b) => {
+      if (sortBy === "newest") {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      }
+      if (sortBy === "price-low") {
+        return (a.price || 0) - (b.price || 0);
+      }
+      if (sortBy === "price-high") {
+        return (b.price || 0) - (a.price || 0);
+      }
+      if (sortBy === "name") {
+        return (a.title || "").localeCompare(b.title || "");
+      }
+      return 0;
+    });
+
+  const productsPerPage = 4;
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const paginatedProducts = useMemo(() => {
+    const startIdx = (currentPage - 1) * productsPerPage;
+    return filteredProducts.slice(startIdx, startIdx + productsPerPage);
+  }, [filteredProducts, currentPage]);
+
   if (loading) {
     return (
       <Container className="text-center py-5">
@@ -299,7 +350,7 @@ const ProductList = () => {
           >
             <option value="all">Tất cả danh mục</option>
             <option value="Electronics">Điện tử</option>
-            <option value="Watches">Đồng hồ</option>
+            <option value="Home & Kitchen">Home & Kitchen</option>
             <option value="Fashion">Thời trang</option>
           </Form.Select>
         </Col>
@@ -317,9 +368,16 @@ const ProductList = () => {
         </Col>
 
         <Col lg={4} md={12} className="mb-3">
-          <div className="d-flex justify-content-end align-items-center">
+          <Form.Control
+            type="number"
+            min={0}
+            value={minPrice}
+            onChange={e => setMinPrice(Number(e.target.value))}
+            placeholder="Giá từ"
+          />
+          <div className="d-flex justify-content-end align-items-center mt-2">
             <small className="me-3 text-muted">
-              Hiển thị {products.length} sản phẩm
+              Hiển thị {filteredProducts.length} sản phẩm
             </small>
             <div className="btn-group" role="group">
               <Button
@@ -342,7 +400,7 @@ const ProductList = () => {
       </Row>
 
       {/* Products Display */}
-      {products.length === 0 ? (
+      {filteredProducts.length === 0 ? (
         <Row>
           <Col className="text-center py-5">
             <i className="bi bi-inbox display-1 text-muted"></i>
@@ -356,7 +414,7 @@ const ProductList = () => {
         <>
           {viewMode === "grid" ? (
             <Row>
-              {products.map((product) => (
+              {paginatedProducts.map((product) => (
                 <Col key={product._id} xl={3} lg={4} md={6} className="mb-4">
                   <ProductCard product={product} />
                 </Col>
@@ -365,7 +423,7 @@ const ProductList = () => {
           ) : (
             <Row>
               <Col>
-                {products.map((product) => (
+                {paginatedProducts.map((product) => (
                   <ProductListItem key={product._id} product={product} />
                 ))}
               </Col>
@@ -374,37 +432,38 @@ const ProductList = () => {
         </>
       )}
 
-      {/* Pagination would go here */}
+      {/* Pagination */}
       <Row className="mt-5">
         <Col className="d-flex justify-content-center">
           <nav>
             <ul className="pagination">
-              <li className="page-item disabled">
-                <span className="page-link">Trước</span>
-              </li>
-              <li className="page-item active">
-                <span className="page-link">1</span>
-              </li>
-              <li className="page-item">
+              <li className={`page-item${currentPage === 1 ? " disabled" : ""}`}>
                 <button
                   className="page-link btn"
-                  onClick={() => console.log("Page 2")}
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
                 >
-                  2
+                  Trước
                 </button>
               </li>
-              <li className="page-item">
-                <button
-                  className="page-link btn"
-                  onClick={() => console.log("Page 3")}
+              {Array.from({ length: totalPages }, (_, idx) => (
+                <li
+                  key={idx + 1}
+                  className={`page-item${currentPage === idx + 1 ? " active" : ""}`}
                 >
-                  3
-                </button>
-              </li>
-              <li className="page-item">
+                  <button
+                    className="page-link btn"
+                    onClick={() => setCurrentPage(idx + 1)}
+                  >
+                    {idx + 1}
+                  </button>
+                </li>
+              ))}
+              <li className={`page-item${currentPage === totalPages || totalPages === 0 ? " disabled" : ""}`}>
                 <button
                   className="page-link btn"
-                  onClick={() => console.log("Next page")}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={currentPage === totalPages || totalPages === 0}
                 >
                   Sau
                 </button>
