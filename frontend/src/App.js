@@ -17,7 +17,7 @@ import Register from "./pages/Register";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 // 👉 Bạn nên dùng biến môi trường cho CLIENT_ID để bảo mật
-const GOOGLE_CLIENT_ID = "213809555482-0p7h983s6arvuptkid0unpai2140600r.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = "your_client_id_here";
 
 function App() {
   return (
