@@ -32,8 +32,8 @@ const ProductDetail = () => {
     message: "",
     variant: "",
   });
-const [reviews, setReviews] = useState([]);
-const [loadingReviews, setLoadingReviews] = useState(true);
+  const [reviews, setReviews] = useState([]);
+  const [loadingReviews, setLoadingReviews] = useState(true);
 
   useEffect(() => {
     const fetchProductDetail = async () => {
@@ -61,6 +61,23 @@ const [loadingReviews, setLoadingReviews] = useState(true);
     if (id) {
       fetchProductDetail();
     }
+    // Fetch reviews
+    const fetchReviews = async () => {
+      try {
+        setLoadingReviews(true);
+        const res = await axios.get(`http://localhost:9999/api/products/${id}/reviews`);
+        if (res.data && res.data.success) {
+          setReviews(res.data.data);
+        } else {
+          setReviews([]);
+        }
+      } catch (err) {
+        setReviews([]);
+      } finally {
+        setLoadingReviews(false);
+      }
+    };
+    if (id) fetchReviews();
   }, [id]);
 
   const showNotification = (message, variant = "success") => {
@@ -288,7 +305,7 @@ const [loadingReviews, setLoadingReviews] = useState(true);
                   </Badge>
                 )}
                 <Badge bg="secondary" className="px-3 py-2">
-                  {product.categoryId?.name || "Chưa phân loại"}
+                  {product.categoryId?.name || product.category?.name || "Chưa phân loại"}
                 </Badge>
                 <Badge
                   bg={
@@ -489,12 +506,6 @@ const [loadingReviews, setLoadingReviews] = useState(true);
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="shipping">
-                      <i className="bi bi-truck me-2"></i>
-                      Vận chuyển
-                    </Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
                     <Nav.Link eventKey="reviews">
                       <i className="bi bi-star me-2"></i>
                       Đánh giá
@@ -532,9 +543,9 @@ const [loadingReviews, setLoadingReviews] = useState(true);
                       <table className="table table-striped">
                         <tbody>
                           <tr>
-                            <td className="fw-semibold">Danh mục</td>
+                            <td className="fw-semibold">Phân loại</td>
                             <td>
-                              {product.categoryId?.name || "Chưa phân loại"}
+                              {product.categoryId?.name || product.category?.name || "Chưa phân loại"}
                             </td>
                           </tr>
                           <tr>
@@ -573,40 +584,6 @@ const [loadingReviews, setLoadingReviews] = useState(true);
                           )}
                         </tbody>
                       </table>
-                    </div>
-                  </Tab.Pane>
-
-                  <Tab.Pane eventKey="shipping">
-                    <div className="shipping-info">
-                      <h5 className="mb-3">Thông tin vận chuyển</h5>
-                      <div className="row">
-                        <div className="col-md-6">
-                          <div className="d-flex align-items-center mb-3">
-                            <i className="bi bi-truck text-primary me-3 fs-4"></i>
-                            <div>
-                              <h6 className="mb-1">Giao hàng tiêu chuẩn</h6>
-                              <small className="text-muted">
-                                3-5 ngày làm việc
-                              </small>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-md-6">
-                          <div className="d-flex align-items-center mb-3">
-                            <i className="bi bi-lightning text-warning me-3 fs-4"></i>
-                            <div>
-                              <h6 className="mb-1">Giao hàng nhanh</h6>
-                              <small className="text-muted">
-                                1-2 ngày làm việc
-                              </small>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="alert alert-info">
-                        <i className="bi bi-info-circle me-2"></i>
-                        Miễn phí vận chuyển cho đơn hàng trên $50
-                      </div>
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="reviews">
