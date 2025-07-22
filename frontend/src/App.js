@@ -12,6 +12,7 @@ import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import OrderHistory from "./pages/HistoryOrder";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/orders/history" element={<OrderHistory/>} />
+              <Route path="/user/profile" element={<Profile />} />
             </Routes>
           </main>
           <Footer />

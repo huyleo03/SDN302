@@ -66,7 +66,7 @@ const Header = () => {
                     {user?.username || "User"}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => navigate("/profile")}>
+                    <Dropdown.Item onClick={() => navigate("/user/profile")}>
                       <i className="bi bi-person me-2"></i>
                       Hồ sơ
                     </Dropdown.Item>

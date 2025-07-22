@@ -166,7 +166,8 @@ exports.login = async (req, res) => {
         email: user.email,
         role: user.role,
       },
-      process.env.JWT_SECRET,{expiresIn: process.env.JWT_EXPIRATION}, 
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRATION }
     );
 
     // Remove password from user object
@@ -177,12 +178,12 @@ exports.login = async (req, res) => {
       success: true,
       message: "Đăng nhập thành công",
       token,
-      user : {
+      user: {
         id: user._id,
         username: user.username,
         email: user.email,
-        role: user.role
-      }
+        role: user.role,
+      },
     });
   } catch (error) {
     res.status(500).json({
@@ -279,5 +280,58 @@ exports.googleLogin = async (req, res) => {
   } catch (err) {
     console.error("Google Login Error:", err);
     res.status(500).json({ message: "Lỗi server khi đăng nhập bằng Google." });
+  }
+};
+
+exports.updateProfile = async (req, res) => {
+  const { username, email, avatarUrl } = req.body;
+  const { userId } = req.user; // Thường được gán từ middleware xác thực JWT
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "Không tìm thấy người dùng." });
+    }
+    // Kiểm tra xem email đã được sử dụng chưa
+    const existingUser = await User.findOne({ email: email.toLowerCase().trim() });
+    if (existingUser && existingUser._id.toString() !== userId) {
+      return res.status(400).json({ message: "Email đã được sử dụng." });
+    }
+    // Cập nhật thông tin người dùng
+    user.username = username.trim();
+    user.email = email.toLowerCase().trim();
+    user.avatarURL = avatarUrl ? avatarUrl.trim() : user.avatarURL;
+    await user.save();
+    // Trả về thông tin người dùng đã cập nhật
+    const updatedUser = {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      avatarURL: user.avatarURL,
+      role: user.role,
+      isVerified: user.isVerified,
+    };
+    res.status(200).json({message: "Cập nhật thông tin thành công.",  user: updatedUser});
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).json({ message: "Lỗi server khi cập nhật thông tin." });
+  }
+};
+
+exports.getUserProfile = async (req, res) => {
+  const { userId } = req.user;
+  try {
+    const user = await User.findById(userId).select(
+      "-password -verificationToken"
+    );
+    if (!user) {
+      return res.status(404).json({ message: "Không tìm thấy người dùng." });
+    }
+    res.status(200).json({ user });
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    res
+      .status(500)
+      .json({ message: "Lỗi server khi lấy thông tin người dùng." });
   }
 };
