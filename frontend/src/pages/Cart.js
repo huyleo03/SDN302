@@ -1,22 +1,29 @@
-import React from 'react';
-import { 
-  Container, 
-  Row, 
-  Col, 
-  Card, 
-  Button, 
-  ListGroup, 
-  Badge, 
+import React from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  ListGroup,
+  Badge,
   Alert,
-  Form
-} from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import { useCart } from '../hooks/useCart';
-import { formatPrice } from '../utils/formatters';
+  Form,
+} from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "../hooks/useCart";
+import { formatPrice } from "../utils/formatters";
 
 const Cart = () => {
   const navigate = useNavigate();
-  const { items, totalItems, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
+  const {
+    items,
+    totalItems,
+    totalPrice,
+    updateQuantity,
+    removeFromCart,
+    clearCart,
+  } = useCart();
 
   const handleQuantityChange = (productId, newQuantity) => {
     if (newQuantity < 1) {
@@ -31,10 +38,9 @@ const Cart = () => {
       alert("Giỏ hàng của bạn đang trống!");
       return;
     }
-    
-    alert(`Đang xử lý thanh toán cho ${totalItems} sản phẩm với tổng tiền ${formatPrice(totalPrice)}`);
-    clearCart();
-    navigate('/');
+
+    // Navigate to checkout page
+    navigate("/checkout");
   };
 
   if (items.length === 0) {
@@ -47,12 +53,13 @@ const Cart = () => {
                 <i className="bi bi-cart-x display-1 text-muted mb-4"></i>
                 <h2 className="mb-3">Giỏ hàng trống</h2>
                 <p className="text-muted mb-4">
-                  Bạn chưa có sản phẩm nào trong giỏ hàng. Hãy khám phá các sản phẩm tuyệt vời của chúng tôi!
+                  Bạn chưa có sản phẩm nào trong giỏ hàng. Hãy khám phá các sản
+                  phẩm tuyệt vời của chúng tôi!
                 </p>
-                <Button 
-                  variant="primary" 
+                <Button
+                  variant="primary"
                   size="lg"
-                  onClick={() => navigate('/')}
+                  onClick={() => navigate("/")}
                   className="px-4"
                 >
                   <i className="bi bi-shop me-2"></i>
@@ -76,10 +83,7 @@ const Cart = () => {
               <i className="bi bi-cart3 me-2"></i>
               Giỏ hàng của bạn
             </h1>
-            <Button 
-              variant="outline-secondary"
-              onClick={() => navigate('/')}
-            >
+            <Button variant="outline-secondary" onClick={() => navigate("/")}>
               <i className="bi bi-arrow-left me-2"></i>
               Tiếp tục mua sắm
             </Button>
@@ -104,7 +108,9 @@ const Cart = () => {
                     variant="outline-danger"
                     size="sm"
                     onClick={() => {
-                      if (window.confirm('Bạn có chắc muốn xóa tất cả sản phẩm?')) {
+                      if (
+                        window.confirm("Bạn có chắc muốn xóa tất cả sản phẩm?")
+                      ) {
                         clearCart();
                       }
                     }}
@@ -123,25 +129,37 @@ const Cart = () => {
                       {/* Product Image */}
                       <Col xs={12} sm={3} className="mb-3 mb-sm-0">
                         <img
-                          src={item.productId?.images?.[0] || 'https://via.placeholder.com/150x150?text=No+Image'}
-                          alt={item.productId?.title || 'Sản phẩm'}
+                          src={
+                            item.productId?.images?.[0] ||
+                            "https://via.placeholder.com/150x150?text=No+Image"
+                          }
+                          alt={item.productId?.title || "Sản phẩm"}
                           className="img-fluid rounded"
-                          style={{ maxHeight: '120px', width: '100%', objectFit: 'cover' }}
+                          style={{
+                            maxHeight: "120px",
+                            width: "100%",
+                            objectFit: "cover",
+                          }}
                         />
                       </Col>
 
                       {/* Product Info */}
                       <Col xs={12} sm={4} className="mb-3 mb-sm-0">
                         <h6 className="mb-2 fw-bold">
-                          {item.productId?.title || 'Không có tên sản phẩm'}
+                          {item.productId?.title || "Không có tên sản phẩm"}
                         </h6>
                         <p className="text-muted small mb-2">
-                          Người bán: <strong>{item.sellerId?.username || 'Không rõ'}</strong>
+                          Người bán:{" "}
+                          <strong>
+                            {item.sellerId?.username || "Không rõ"}
+                          </strong>
                         </p>
                         <div className="mb-2">
                           <Badge bg="success" className="me-2">
                             <i className="bi bi-check-circle me-1"></i>
-                            {item.status === 'active' ? 'Có sẵn' : 'Không khả dụng'}
+                            {item.status === "active"
+                              ? "Có sẵn"
+                              : "Không khả dụng"}
                           </Badge>
                           <Badge bg="info">
                             Giá lúc thêm: {formatPrice(item.priceAtTime)}
@@ -149,7 +167,8 @@ const Cart = () => {
                         </div>
                         <small className="text-muted">
                           <i className="bi bi-clock me-1"></i>
-                          Thêm vào: {new Date(item.addedAt).toLocaleDateString('vi-VN')}
+                          Thêm vào:{" "}
+                          {new Date(item.addedAt).toLocaleDateString("vi-VN")}
                         </small>
                       </Col>
 
@@ -159,7 +178,12 @@ const Cart = () => {
                           <Button
                             variant="outline-secondary"
                             size="sm"
-                            onClick={() => handleQuantityChange(item.productId?._id || item._id, item.quantity - 1)}
+                            onClick={() =>
+                              handleQuantityChange(
+                                item.productId?._id || item._id,
+                                item.quantity - 1
+                              )
+                            }
                             disabled={item.quantity <= 1}
                           >
                             <i className="bi bi-dash"></i>
@@ -167,16 +191,26 @@ const Cart = () => {
                           <Form.Control
                             type="number"
                             value={item.quantity}
-                            onChange={(e) => handleQuantityChange(item.productId?._id || item._id, parseInt(e.target.value) || 1)}
+                            onChange={(e) =>
+                              handleQuantityChange(
+                                item.productId?._id || item._id,
+                                parseInt(e.target.value) || 1
+                              )
+                            }
                             className="mx-2 text-center"
-                            style={{ width: '60px' }}
+                            style={{ width: "60px" }}
                             min="1"
                             max="99"
                           />
                           <Button
                             variant="outline-secondary"
                             size="sm"
-                            onClick={() => handleQuantityChange(item.productId?._id || item._id, item.quantity + 1)}
+                            onClick={() =>
+                              handleQuantityChange(
+                                item.productId?._id || item._id,
+                                item.quantity + 1
+                              )
+                            }
                             disabled={item.quantity >= 99}
                           >
                             <i className="bi bi-plus"></i>
@@ -203,7 +237,11 @@ const Cart = () => {
                             variant="outline-danger"
                             size="sm"
                             onClick={() => {
-                              if (window.confirm(`Bạn có chắc muốn xóa "${item.productId?.title}" khỏi giỏ hàng?`)) {
+                              if (
+                                window.confirm(
+                                  `Bạn có chắc muốn xóa "${item.productId?.title}" khỏi giỏ hàng?`
+                                )
+                              ) {
                                 removeFromCart(item.productId?._id || item._id);
                               }
                             }}
@@ -222,7 +260,7 @@ const Cart = () => {
 
         {/* Order Summary */}
         <Col lg={4}>
-          <Card className="shadow-sm sticky-top" style={{ top: '20px' }}>
+          <Card className="shadow-sm sticky-top" style={{ top: "20px" }}>
             <Card.Header className="bg-primary text-white">
               <h5 className="mb-0">
                 <i className="bi bi-receipt me-2"></i>
@@ -246,7 +284,9 @@ const Cart = () => {
                 <hr />
                 <div className="d-flex justify-content-between fw-bold fs-5">
                   <span>Tổng cộng:</span>
-                  <span className="text-primary">{formatPrice(totalPrice)}</span>
+                  <span className="text-primary">
+                    {formatPrice(totalPrice)}
+                  </span>
                 </div>
               </div>
 
@@ -258,11 +298,11 @@ const Cart = () => {
                   className="fw-bold"
                 >
                   <i className="bi bi-credit-card me-2"></i>
-                  Thanh toán ngay
+                  Tiếp tục đặt hàng
                 </Button>
                 <Button
                   variant="outline-secondary"
-                  onClick={() => navigate('/')}
+                  onClick={() => navigate("/")}
                 >
                   <i className="bi bi-arrow-left me-2"></i>
                   Tiếp tục mua sắm

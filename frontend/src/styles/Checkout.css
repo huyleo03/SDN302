@@ -1,0 +1,122 @@
+/* Checkout page styles */
+.checkout-container {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.checkout-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.checkout-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.checkout-header {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  border-radius: 12px 12px 0 0;
+  color: white;
+  padding: 1.25rem;
+}
+
+.payment-option {
+  transition: all 0.3s ease;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.payment-option:hover {
+  border-color: #007bff;
+  background-color: #f8f9ff;
+}
+
+.payment-option input[type="radio"]:checked + label .payment-option {
+  border-color: #007bff;
+  background-color: #e7f3ff;
+}
+
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn-checkout {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-checkout:hover {
+  background: linear-gradient(135deg, #218838, #1ea080);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.order-summary-item {
+  border-bottom: 1px solid #f1f3f4;
+  padding: 0.75rem 0;
+}
+
+.order-summary-item:last-child {
+  border-bottom: none;
+}
+
+.sticky-summary {
+  position: sticky;
+  top: 20px;
+}
+
+@media (max-width: 768px) {
+  .sticky-summary {
+    position: static;
+  }
+  
+  .checkout-card {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Loading spinner animation */
+.processing-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.processing-spinner {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+}
+
+/* Alert styles */
+.security-alert {
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  border-left: 4px solid #28a745;
+}
+
+.info-alert {
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #cce8ff, #b8dcff);
+  border-left: 4px solid #007bff;
+}

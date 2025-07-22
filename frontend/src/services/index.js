@@ -2,6 +2,8 @@
 export { default as authService } from './authService';
 export { default as cartService } from './cartService';
 export { default as productService } from './productService';
+export { default as addressService } from './addressService';
+export { default as orderService } from './orderService';
 export { default as api } from './api';
 
 // Service aggregator for complex operations
